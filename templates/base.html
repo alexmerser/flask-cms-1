@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+{% block head %}
+<title>{{'SpecXP'}}</title>
+{% endblock %}
+
+{% block import_area %}
+<script
+	src="{{url_for('static', filename='../static/js/jquery-1.9.1.js')}}"
+	type="text/javascript" charset="utf-8"></script>
+
+<link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css"
+	type="text/css" media="screen" />
+<link rel="stylesheet" href="../static/css/style.css" type="text/css"
+	media="screen" />
+<script
+	src="{{url_for('static', filename='../static/bootstrap/js/bootstrap.min.js')}}"
+	type="text/javascript" charset="utf-8"></script>
+{% endblock %}
+
+{% block js_code %}
+{% endblock %}
+
+</head>
+<body>
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target=".navbar-ex1-collapse">
+				<span class="sr-only">Toggle navigation</span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/">{{'SpecXP'}}</a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse navbar-ex1-collapse">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="/">{{'Home'}}</a></li>
+				<li><a href="#">{{'About'}}</a></li>
+				<li class="dropdown"><a href="#" class="dropdown-toggle"
+					data-toggle="dropdown">{{'Administration'}}<b class="caret"></b></a>
+					<ul id="action-menus" class="dropdown-menu">
+						<li><a href="/manage_projects">Project Management</a></li>
+						<li><a href="/manage_users">User Management</a></li>
+					</ul></li>
+			</ul>
+			<div class="navbar-right" role="navigation">
+
+
+				{% if username != None %} 
+					<a id="user-settings">{{username}}</a> 
+					<a href="/logout" class="btn btn-default">{{'Logout'}}</a>
+				{% else %} 
+					<a href="/login" class="btn btn-default">{{'Login'}}</a>
+				{% endif %}
+			
+			</div>
+		</div>
+	</div>
+	<!--end of navbar-->
+
+	{% block breadcrumb %}
+	<ol class="breadcrumb" style="height: 40px; margin-top: 50px;"></ol>
+	{% endblock %}
+
+	<div class="col-xs-18 col-sm-12" style="height: 1024px;">
+		{% block content%}
+		
+		{% endblock %}
+	</div>
+
+
+	<div class="footer-wrapper">
+		<div id="footer">
+			{% block footer %}
+			<div class="container">
+				<div class="row">
+					<div>
+						<small>&copy; 2013 London Community Company. All rights
+							Reserved</small>
+					</div>
+					<div>
+						<a href="#" title="Terms &amp; Conditions">Terms &amp;
+							Conditions</a>
+					</div>
+					<div>
+						<a href="#" title="Sitemap">Sitemap</a>
+					</div>
+				</div>
+			</div>
+			{% endblock %}
+		</div>
+	</div>
+	<! -- end wrap -->
+</body>

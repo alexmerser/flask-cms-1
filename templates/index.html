@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block import_area %}
+{{ super() }}
+<script src="{{url_for('static', filename='../static/js/control/ztable.js')}}" type="text/javascript" charset="utf-8"></script>
+<script src="{{url_for('static', filename='../static/js/control/zform.js')}}" type="text/javascript" charset="utf-8"></script>
+<script src="{{url_for('static', filename='../static/js/control/zui.js')}}" type="text/javascript" charset="utf-8"></script>
+<script src="{{url_for('static', filename='../static/js/app/Sprint.js')}}" type="text/javascript" charset="utf-8"></script>
+<script src="{{url_for('static', filename='../static/datepicker/js/bootstrap-datepicker.js')}}" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" href="../static/datepicker/css/datepicker.css" type="text/css" media="screen" />
+<script src="{{url_for('static', filename='../static/treeview/tree.jquery.js')}}" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" href="../static/treeview/jqtree.css" type="text/css" media="screen" />
+{% endblock %}
+
+{% block js_code %}
+{{ super() }}
+<script>
+	$(document).ready(function(){
+		
+		var $SprintForm = $('#sprint-form').ZForm({
+			//errors:{{ errors_json | safe }}
+		});
+		
+		var $ProjectViewTab = $('#project-view-tabs').ZTab();
+		
+		/*
+		function select_project($Row){
+			var sid = $Row.attr('row_id');
+			var _tab = $ProjectViewTab.getActiveTab();
+			
+			$SprintForm.setFieldByName("project_id", sid);
+			
+			if ($(_tab).find('a').attr("href")=="#project-info-tab"){
+				$.post('/get_project', { sid: sid} ).done(
+						function(data){
+							var project = $.parseJSON(data.project);
+							
+							var $InfoPanel = $('#project-info-panel').find('.panel-body').empty();
+							$InfoPanel.append($('<p></p>').text(project['name']));
+							$InfoPanel.append($('<p></p>').text(project['description']));
+							$InfoPanel.append($('<p></p>').text('plan from:' + project['start-date'] + ' to:' + project['end-date']));
+						});
+			}else if ($(_tab).find('a').attr("href")=="#project-sprints-tab"){
+				$.post('/get_sprints', { project_id: sid}).done(
+						function(data){
+							var _sprints = $.parseJSON(data.sprints);
+							$SprintList.reload(_sprints);
+							if (_sprints.length > 0){
+								$('#project-sprints-tab').find('.z-btn-specs').attr("href","\/sprint_view\/"+ _sprints[0]['id']);
+							}
+						});
+			}
+		}
+		
+		var $ProjectList = $('#project-list').ZTable({
+									columns:{'name':'Name'},
+									datas:{{ projects | safe }},
+									with_title:false,
+									select_row_cb: select_project});
+		*/
+		
+		
+		function select_sprint($Row){
+			var _id = $Row.attr('row_id');
+			$('#project-sprints-tab').find('.z-btn-specs').attr("href","\/sprint_view\/"+ _id);
+		}
+	
+		var $SprintList = $('#sprint-list').ZTable({
+			columns:{'name':'Name','description':'Description'},
+			datas:{{ sprints | safe }},
+			select_row_cb: select_sprint});
+		
+		$('.breadcrumb').append('<li><a href="#"></a>Home</li>');
+		
+		var sprint_panel = new SprintPanel('project-sprints-tab', $ProjectList, $SprintList, $SprintForm);
+
+
+		$.post('/get_tree_datas').done(
+				function(data){
+					var _datas = $.parseJSON(data.trees);
+				    $('#spec-tree').tree({
+				        data: _datas,
+				        selectable: true,
+				        saveState:true,
+				        autoEscape: false
+				        //openedIcon: '-',
+				        //closedIcon: '+'
+				    });
+				});
+	});
+	</script>
+{% endblock %} 
+
+{% block breadcrumb %}
+{{super()}}
+{% endblock %}
+
+
+{% block content %}
+
+		<div class="left-area col-xs-4 col-sm-2">
+			<table id="project-list"></table>
+		</div>
+
+		<div class="main-area col-xs-12 col-sm-9">
+			<ul id="project-view-tabs" class="nav nav-tabs">
+				<li class="z-tab"><a href="#project-sprints-tab" data-toggle="tab">Sprints</a></li>
+			  	<li class="z-tab"><a href="#project-info-tab" data-toggle="tab">Project</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane fade" id="project-info-tab">
+					<div id="toolbar-row" class="row z-toolbar col-sm-12">
+						<div class="btn-toolbar col-sm-11">
+							<button class="btn btn-primary col-md-2 z-btn-new" data-toggle="modal" data-target="#project_dialog">New</button>
+							<button class="btn btn-primary col-md-2 z-btn-edit" data-toggle="modal" data-target="#project_dialog">Edit</button>
+							<button class="btn btn-primary col-md-2">Delete</button>
+							<button class="btn btn-primary col-md-2 z-btn-submit">Submit</button>
+						</div>
+					</div>
+					
+					<div id='project-info-panel' class="row z-panel col-sm-12">
+						<div class="panel panel-default z-panel">
+							  <div class="panel-body">
+							  	
+							  	
+							  </div>
+						</div>
+					</div>
+					
+					<div class="row z-panel col-sm-12">
+						<div class="panel panel-default z-panel">
+							  <div class="panel-body">
+							  	Comment-1
+							  </div>
+						</div>
+					</div>
+					
+				</div>
+				<div class="tab-pane fade" id="project-sprints-tab">
+					<div id="toolbar-row" class="row z-toolbar col-sm-12">
+						<div class="btn-toolbar col-sm-11">
+							<button class="btn btn-primary col-md-2 z-btn-new" data-toggle="modal" data-target="#sprint_dialog">New</button>
+							<button class="btn btn-primary col-md-2 z-btn-edit" data-toggle="modal" data-target="#sprint_dialog">Edit</button>
+							<button class="btn btn-primary col-md-2 z-btn-del">Delete</button>
+							<a class="btn btn-primary col-md-2 z-btn-specs" href="/sprint_view">Sprint View</a>
+						</div>
+					</div>
+					
+					<div class="row z-panel col-sm-12">
+						<div class="panel panel-default z-panel">
+							  <div class="panel-body">
+							  	<table id="sprint-list"></table>
+							  </div>
+						</div>
+					</div>
+
+				</div>
+			</div><!-- end of .tab-content -->
+		</div><!-- end of .main-area -->
+		
+		
+
+	<!--/span-->
+	
+	<!-- Modal Dialog -->
+	<div class="modal fade" id="sprint_dialog" tabindex="-1" role="dialog" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title">Sprint</h4>
+	      </div>
+	      
+	      
+	      <form id="sprint-form" onsubmit="return false;"><!-- action="/submit_sprint" method="post" -->
+	      	<div class="modal-body">
+				<div class="row form-group">
+					<div class="z-label col-md-2">{{ 'Name' }}</div>
+					<div class="col-md-7">
+						<input class="form-control" name="name" type="text" placeholder="{{ 'Enter sprint name' }}" />
+					</div>
+					<div class="col-md-3 z-hint"></div>
+				</div>
+		
+				<div class="row form-group">
+					<div class="z-label col-md-2">{{ 'Description' }}</div>
+					<div class="col-md-7">
+						<textarea class="form-control" rows="5" name="description" placeholder="{{ 'Enter description' }}"></textarea>
+					</div>
+					<div class="col-md-3 z-hint"></div>
+				</div>
+				
+				<div class="row form-group" >
+					<div class="z-label col-md-2">{{ 'Plan' }}</div>
+					<div class="col-md-3">
+						<input class="form-control" name="start-date" data-date-format="mm/dd/yyyy" placeholder="{{ 'Start date' }}">
+					</div>
+					<div class="col-md-4 input-group">
+						<span class="input-group-addon">to</span>
+						<input class="form-control" name="end-date" data-date-format="mm/dd/yyyy" placeholder="{{ 'End date' }}">
+					</div>
+					<div class="col-md-3 z-hint"></div>
+				</div>
+				
+				<input class="hide" type="text" name="mode" />
+				<input class="hide" type="text" name="project_id" />
+				<input class="hide" type="text" name="id" />
+				<input class="hide" type="text" name="created" />
+	
+	      </div>
+	      <div class="modal-footer">
+	        <button class="btn btn-default cancel" data-dismiss="modal">Close</button>
+	        <button class="btn btn-primary z-btn-submit">Save changes</button>
+	      </div>
+	      
+	      </form>
+	      
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+	
+	
+	
+{% endblock %}
+
+{% block right_area %}
+	<div class="right-side-area col-md-2">
+		<div id="spec-tree"></div>
+	</div>
+{% endblock %}
+
+

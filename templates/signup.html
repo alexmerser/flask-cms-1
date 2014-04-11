@@ -1,0 +1,90 @@
+<head>
+<title>Login</title>
+</head>
+
+<link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css"
+	type="text/css" media="screen" />
+
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="../static/bootstrap/css/bootstrap-theme.min.css">
+
+<link rel="stylesheet" href="../static/css/style.css">
+
+<script
+	src="{{url_for('static', filename='../static/js/jquery-1.9.1.js')}}"
+	type="text/javascript" charset="utf-8"></script>
+
+<script
+	src="{{url_for('static', filename='../static/bootstrap/js/bootstrap.min.js')}}"
+	type="text/javascript" charset="utf-8"></script>
+
+
+<script src="{{url_for('static', filename='../static/js/zform.js')}}"
+	type="text/javascript" charset="utf-8"></script>
+<script>
+	$(document).ready(function(){
+		var form = $('#signup-form').ZForm({height:500,
+				errors:{{ errors_json | safe }}
+			});
+	});
+	
+</script>
+
+
+<div class="container">
+	<h1>Sign up to London Community</h1>
+	<form id="signup-form" action="/signup" method="post">
+
+		<!-- Username -->
+		<div class="row form-group" name="username">
+			<div class="col-md-3">
+				<input class="form-control z-input" type="text" placeholder="Name" />
+			</div>
+			<div class="col-md-3 z-label">Your name*</div>
+		</div>
+
+		<!-- Password -->
+		<div class="row form-group" name="password">
+			<div class="col-md-3">
+				<input class="form-control z-input" type="password"
+					placeholder="Password" />
+			</div>
+			<div class="col-md-3 z-label">6 characters or more*</div>
+		</div>
+
+		<!-- Email -->
+		<div class="row form-group" name="email">
+			<div class="col-md-3">
+				<input class="form-control z-input" type="text" placeholder="Email" />
+			</div>
+			<div class="col-md-3 z-label">Your email*</div>
+		</div>
+
+		<!-- Phone -->
+		<div class="row form-group" name="phone">
+			<div class="col-md-3">
+				<input class="form-control z-input" type="text" placeholder="Phone number" />
+			</div>
+			<div class="col-md-3 z-label">Your phone number</div>
+		</div>
+
+		<div class="row form-group" name="agreement">
+			<div class="col-md-3">
+				<div class="col-md-1">
+					<input class="checkbox z-input" type="checkbox" name="agreement"/>
+				</div>
+				<div class="col-md-10 z-label">I Agree the following terms</div>
+			</div>
+		</div>
+		<br/>
+
+		<div class="row col-md-12">
+			<div class="btn-toolbar col-md-10 z-btn-area">
+				<button type="submit" name="signup"
+					class="submit btn btn-primary col-md-3">Create account</button>
+			</div>
+		</div>
+
+	</form>
+</div>
