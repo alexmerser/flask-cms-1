@@ -1,4 +1,4 @@
-from app.lib.model import Model, Dao
+from lib.model import Model, Dao
 
 class Role():
     Admin, User = range(2)

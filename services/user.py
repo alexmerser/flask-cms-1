@@ -1,13 +1,12 @@
-from app.models.user import Role, User, UserDao
-from app.lib.validator import Validator
-from app.lib.form import Form, Mode
-
+from models.user import Role, User, UserDao
+from lib.validator import Validator
+from lib.form import Form, Mode
 from flask import request
 from flask_login import login_user
-import time
+
 from bson.objectid import ObjectId
 
-
+import time
     
 class LoginError():
     NO_ERROR, USER_NOT_EXIT, WRONG_PASSWORD = range(3)

@@ -1,7 +1,7 @@
 import json
 
 from flask import jsonify
-from app import app
+from server import app
 
 
 """

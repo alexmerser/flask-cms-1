@@ -1,8 +1,8 @@
 import json
 
 from flask import jsonify
-from app import app
-from app.services.user import LoginForm, UserForm, UserService
+from server import app
+from services.user import LoginForm, UserForm, UserService
 
 @app.route('/')
 def root():

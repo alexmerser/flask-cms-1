@@ -1,4 +1,4 @@
-from app.lib.model import Model, Dao
+from lib.model import Model, Dao
 
 # Enum PropertyType
 class PropertyType:

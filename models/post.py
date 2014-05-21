@@ -1,4 +1,4 @@
-from model import Model, Dao
+from lib.model import Model, Dao
 
 
 class Post(Model):

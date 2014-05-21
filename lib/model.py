@@ -2,7 +2,7 @@ from mongodb import DBConn
 from datetime import datetime
 from bson.dbref import DBRef
 from bson.objectid import ObjectId
-from app.config import cfg
+from config import cfg
 
 db_conn = DBConn()
 db = db_conn.get_database(cfg.database)

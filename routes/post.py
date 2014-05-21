@@ -1,9 +1,10 @@
-import json
+
 from flask_login import current_user
-from flask import jsonify
-from app import app
-from flask import request
-from app.lib.fs import FileData, FS
+from flask import jsonify, request
+from server import app
+from lib.fs import FileData, FS
+
+import json
 
 @app.route('/pictures', methods=['POST'])
 def save_picture():

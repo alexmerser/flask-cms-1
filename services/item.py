@@ -1,13 +1,10 @@
 from model.item import ItemDao
-from model.company import Company, CompanyDao
-from model.item_picture import ItemPictureDao
-from service.item_picture import ItemPictureService
 from lib.validator import Validator
 from lib.form import Form
 from bson.objectid import ObjectId
 from bson.dbref import DBRef
 
-from service import Service
+from services import Service
 
 class ItemService(Service):
     def __init__(self):
