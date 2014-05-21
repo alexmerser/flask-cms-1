@@ -1,19 +1,23 @@
 from flask import request, session, current_app
+
+class Mode:
+    NEW, EDIT = range(2)
     
 class Form():
     
     def __init__(self):
         self.request = request
-        if self.is_submitted():
-            self.input = self.get_raw_input()
-            
-            # Clean up the hidden input
-            if '_mode' in self.input:
-                self.mode = self.input['_mode']
-                del self.input['_mode']
+        if request is not None:
+            self.raw_inputs = self.get_raw_inputs(request)
+
+            if '_mode' in self.raw_inputs:
+                self.mode = self.raw_inputs['_mode']
+                del self.raw_inputs['_mode']
                 
-                if self.mode == 'new' and '_id' in self.input:
-                    del self.input['_id']
+                if self.mode == Mode.NEW and '_id' in self.raw_inputs:
+                    del self.raw_inputs['_id']
+            else:
+                self.mode = Mode.NEW # NEW by default
                 
     def is_submitted(self):
         """
@@ -27,13 +31,19 @@ class Form():
         """
         return request and request.method in ("PUT", "POST")
  
-    def get_raw_input(self):
+    def get_raw_inputs(self, req):
         """Get raw inputs from the form, group into a map and return this map.
         """
+        """
         values = {}
-        for key in request.values:
-            values[key] = request.values[key]
+        for key in vals:
+            values[key] = vals[key]
         return values
-
+        """
+        if 'application/json;' in req.content_type.lower():
+            return dict(req.json)
+        else:
+            return dict(req.values)
+    
     def has_error(self):
         return self.errors != []

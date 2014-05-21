@@ -25,6 +25,7 @@ class DBConn:
     def get_database(self, db_name):
         return Database(self.conn, db_name)
 
+
 class Database:
     def __init__(self, db_conn, db_name, page_size=1):
         self.page_size = int(page_size)
