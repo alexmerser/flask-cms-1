@@ -1,6 +1,8 @@
 import json
 
 from flask import jsonify
+from flask_cors import cross_origin
+
 from server import app
 from services.user import LoginForm, UserForm, UserService
 
@@ -10,6 +12,7 @@ def root():
     #return make_response(open('index.html').read())
 
 @app.route("/login", methods=["POST"])
+@cross_origin(headers=['Content-Type'])
 def login():
     '''When a user logs in, their session is marked as 'fresh'.
     '''

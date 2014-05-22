@@ -1,6 +1,7 @@
 pip install flask==0.10.1
 pip install flask-login
 pip install flask-babel
+pip install flask-cors
 
 REM pip install flask-openid
 REM pip install sqlalchemy==0.7.9
