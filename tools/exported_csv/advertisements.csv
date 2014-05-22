@@ -1,0 +1,2 @@
+category;created;phone;user;item;prefer_contact;_id;type;email
+DBRef(u'categories', ObjectId('526dd63f11289205ccd9c5de'));1383434037.63;519-572-0859;DBRef(u'users', ObjectId('526dd9db11289216905fc169'));DBRef(u'houses', ObjectId('527582991128920a44c9c0fa'));0;5275873511289212b48bdf47;0;likzhang@gmail.com

@@ -1,0 +1,4 @@
+_id;name;parent;description
+526dd63f11289205ccd9c5dd;real estate;DBRef(u'categories', ObjectId('526dd63f11289205ccd9c5dd'));house, apartment, room
+526dd63f11289205ccd9c5df;apartment;DBRef(u'categories', ObjectId('526dd63f11289205ccd9c5dd'));condo mini, high level
+526dd63f11289205ccd9c5de;house;DBRef(u'categories', ObjectId('526dd63f11289205ccd9c5dd'));single house, semi-detached, town house, banglow

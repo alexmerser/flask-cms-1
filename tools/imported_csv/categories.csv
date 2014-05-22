@@ -1,0 +1,4 @@
+name;description;parent
+real estate;house, apartment, room;0
+house;single house, semi-detached, town house, banglow;1
+apartment;condo mini, high level;1
