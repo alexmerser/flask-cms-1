@@ -18,9 +18,9 @@ class AddressService(Service):
         addresses = []
         _addresses = self.dao.all()
         for _address in _addresses:
-            c = self.city_dao.find_one({'_id':_address['city_ref'].id})
+            c = self.city_dao.find_one({'_id':_address['city_id']})
             addresses.append({"street":_address['street'],
-                              "city":"{0} {1} {2}".format(c['city'], c['province'], c.['country']),
+                              "city":"{0} {1} {2}".format(c['city'], c['province'], c['country']),
                               "postcode":_address['postcode']})
         return addresses
 
@@ -39,9 +39,9 @@ class AddressService(Service):
             
             if city is None:
                 city_id = self.city_dao.save(city_dict)
-                _dict['city_ref'] = DBRef('cities', city_id)
+                _dict['city_id'] = city_id
             else:
-                _dict['city_ref'] = DBRef('cities', city._id)
+                _dict['city_id'] = city._id
                 
             return self.dao.save(_dict)
 

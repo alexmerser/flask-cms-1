@@ -9,7 +9,7 @@ class Address(Model):
         self.postcode = _dict['postcode']
 
         # associate fields
-        self.city = _dict['city']
+        self.city_id = _dict['city_id']
 
     def __repr__(self):
         return '<Address %r>' % ('Model')

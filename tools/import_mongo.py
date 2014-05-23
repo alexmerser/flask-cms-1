@@ -77,8 +77,8 @@ class Importer():
                 i = 0
                 for cell in row:
                     if self.heads[i] not in ignore_list:
-                        if i == id_col:
-                            _dict[self.heads[i]] = ObjectId(cell)
+                        if 'ObjectId(' in cell:
+                            _dict[self.heads[i]] = eval(cell)
                         elif i in index_list: # If it's an DBRef type
                             _dict[self.heads[i]] = eval(cell).id
                         else:
