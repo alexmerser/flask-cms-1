@@ -80,7 +80,7 @@ class Importer():
                         if i == id_col:
                             _dict[self.heads[i]] = ObjectId(cell)
                         elif i in index_list: # If it's an DBRef type
-                            _dict[self.heads[i]] = eval(cell)
+                            _dict[self.heads[i]] = eval(cell).id
                         else:
                             _dict[self.heads[i]] = cell
                     i += 1
@@ -139,7 +139,7 @@ class Importer():
                 f.close()
             
 if __name__ == '__main__':
-    from db.mongodb import DBConn
+    from lib.mongodb import DBConn
     from config import cfg
     import os
     
@@ -154,6 +154,7 @@ if __name__ == '__main__':
     #exporter.export_all(os.path.join(EXPORTED_CSV_HOME,'houses.csv'), 'houses')
     
     importer = Importer(db)
+    importer.import_all(os.path.join(EXPORTED_CSV_HOME,'addresses.csv'),'addresses')
     """
     importer.remove_all_collections()
     
