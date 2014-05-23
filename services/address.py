@@ -25,11 +25,11 @@ class AddressService(Service):
         return addresses
 
 
-    def submit_address(self, inputs):
-        if inputs['mode'] == 'edit':
+    def save_address(self, inputs, mode):
+        if mode == 'edit':
             #address = address_dao.update_address(inputs['id, inputs['name, inputs['description)
             return None
-        elif inputs['mode'] == 'new':
+        elif mode == 'new':
             city_dict = {'city':inputs['city'], 'province':inputs['province'], 'country':inputs['country']}
             city = self.city_dao.find_one(city_dict)
             
