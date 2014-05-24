@@ -19,7 +19,12 @@ def save_item():
     
     return jsonify({'success':'true'})
 
-
+@app.route('/items', methods=["GET"])
+@cross_origin(headers=['Content-Type'])
+def get_items():
+    item_service = ItemService()
+    items = item_service.get_items()    
+    return jsonify(items=json.dumps(items))
 
 @app.route('/pictures', methods=['POST'])
 @cross_origin(headers=['Content-Type'])

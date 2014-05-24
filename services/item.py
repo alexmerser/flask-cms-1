@@ -119,15 +119,15 @@ class ItemForm(Form):
 
     def get_property_type(self, _type):
         if _type == 'room':
-            return PropertyType.Room
+            return 1#PropertyType.Room
         elif _type == 'house':
-            return PropertyType.House
+            return 2#PropertyType.House
         elif _type == 'apartment':
-            return PropertyType.Apartment
+            return 3#PropertyType.Apartment
         elif _type == 'commercial':
-            return PropertyType.Commercial
+            return 4#PropertyType.Commercial
         else:
-            return PropertyType.NoneType
+            return 0#PropertyType.NoneType
 
     def get_inputs(self):
         d = self.raw_inputs
