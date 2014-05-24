@@ -15,6 +15,10 @@ class CityService(Service):
         for _city in _cities:
             cities.append(_city['city'])
         return cities
+    
+    def get_id(self, query={}):
+        c = self.dao.find_one(query)
+        return c['_id']
 
 class AddressService(Service):
     def __init__(self):

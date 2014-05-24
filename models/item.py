@@ -2,10 +2,11 @@ from lib.model import Model, Dao
 
 # Enum PropertyType
 class PropertyType:
-    Room = 0,
-    House = 1,
-    Apartment = 2,
-    Commercial = 3
+    NoneType = 0,
+    Room = 1,
+    House = 2,
+    Apartment = 3,
+    Commercial = 4
 
 class Item(Model):
     

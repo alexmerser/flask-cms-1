@@ -1,10 +1,13 @@
-from model.item import ItemDao
+from models.item import ItemDao
 from lib.validator import Validator
-from lib.form import Form
-from bson.objectid import ObjectId
-from bson.dbref import DBRef
-
+from lib.form import Form, Mode
 from services import Service
+from services.address import CityService
+from models.item import PropertyType
+
+from bson.objectid import ObjectId
+
+import time
 
 class ItemService(Service):
     def __init__(self):
@@ -78,7 +81,7 @@ class ItemService(Service):
             del _dict['_id']
             
         if mode == Mode.EDIT:
-            if 'id' in user.keys():
+            if 'id' in item.keys():
                 _dict['_id'] = item['id']
         else:
             _dict['created'] = time.time()
@@ -111,4 +114,34 @@ class ItemForm(Form):
         '''
         Form.__init__(self)
         self.validator = ItemValidator()
-        self.errors = self.validator.validate(self.raw_inputs)
+        self.inputs = self.get_inputs()
+        self.errors = self.validator.validate(self.inputs)
+
+    def get_property_type(self, _type):
+        if _type == 'room':
+            return PropertyType.Room
+        elif _type == 'house':
+            return PropertyType.House
+        elif _type == 'apartment':
+            return PropertyType.Apartment
+        elif _type == 'commercial':
+            return PropertyType.Commercial
+        else:
+            return PropertyType.NoneType
+
+    def get_inputs(self):
+        d = self.raw_inputs
+        
+        query = dict([(k,v) for (k,v) in d.items() if k in ['city', 'province', 'country'] ])
+        c = CityService()
+        city_id = c.get_id(query)
+        
+        item = dict([(k,v) for (k,v) in d.items() if k not in ['city', 'province', 'country'] ])
+        item['city_id'] = city_id
+        item['property_type'] = self.get_property_type(item['property_type'])
+        if item['price'] == '':
+            item['price'] = 0
+        else:
+            item['price'] = int(item['price'])
+        
+        return item
