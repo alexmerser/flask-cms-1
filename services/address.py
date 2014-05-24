@@ -1,11 +1,20 @@
-from models.address import AddressDao
-from models.city import CityDao
+from models.address import AddressDao, CityDao
 from services import Service
 from lib.validator import Validator
 from lib.form import Form
 
-from bson.dbref import DBRef
-
+class CityService(Service):
+    def __init__(self):
+        self.dao = CityDao()
+        
+    def get_cities(self, query={}):
+        """ Get address for display
+        """
+        cities = []
+        _cities = self.dao.find(query)
+        for _city in _cities:
+            cities.append(_city['city'])
+        return cities
 
 class AddressService(Service):
     def __init__(self):

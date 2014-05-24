@@ -1,6 +1,4 @@
 flask-cms
 =========
 
-Mobile content management system
-
-use Flask
+A restful Flask server for content management system
