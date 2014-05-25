@@ -6,6 +6,9 @@ class Service():
         u = current_user
         return {'role': int(u.role), 'username':u.username}
     
+    def get_object_id(self):
+        return str(ObjectId())
+    
     def get_dict(self, _dict):
         """ Convert Object in dict to string for display
         """

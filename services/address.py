@@ -54,7 +54,7 @@ class AddressService(Service):
                 city_id = self.city_dao.save(city_dict)
                 _dict['city_id'] = city_id
             else:
-                _dict['city_id'] = city._id
+                _dict['city_id'] = city['_id']
                 
             return self.dao.save(_dict)
 

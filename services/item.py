@@ -2,7 +2,7 @@ from models.item import ItemDao
 from lib.validator import Validator
 from lib.form import Form, Mode
 from services import Service
-from services.address import CityService
+from services.address import CityService, AddressService
 from models.item import PropertyType
 
 from bson.objectid import ObjectId
@@ -77,8 +77,8 @@ class ItemService(Service):
         The '_id' value of to_save or [None] if manipulate is False and save has no _id field.
         """
         _dict = dict(item) # Clone is a must
-        if '_id' in _dict:
-            del _dict['_id']
+        #if '_id' in _dict:
+        #    del _dict['_id']
             
         if mode == Mode.EDIT:
             if 'id' in item.keys():
@@ -130,14 +130,16 @@ class ItemForm(Form):
             return 0#PropertyType.NoneType
 
     def get_inputs(self):
-        d = self.raw_inputs
-        
-        query = dict([(k,v) for (k,v) in d.items() if k in ['city', 'province', 'country'] ])
-        c = CityService()
-        city_id = c.get_id(query)
-        
-        item = dict([(k,v) for (k,v) in d.items() if k not in ['city', 'province', 'country'] ])
-        item['city_id'] = city_id
+        d = self.raw_inputs        
+        address = dict([(k,v) for (k,v) in d.items() if k in ['city', 'province', 'country', 'unit', 'street', 'postcode'] ])
+        address['unit'] = ''
+        address['country'] = 'CA'
+        address_service = AddressService()
+        address_id = address_service.save_address(address, 'new')
+            
+        item = dict([(k,v) for (k,v) in d.items() if k not in ['city', 'province', 'country', 'unit', 'street', 'postcode'] ])
+        item['_id'] = ObjectId(item['_id'])
+        item['address_id'] = address_id
         item['property_type'] = self.get_property_type(item['property_type'])
         if item['price'] == '':
             item['price'] = 0

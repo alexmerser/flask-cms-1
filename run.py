@@ -8,3 +8,4 @@ from routes import index, item, address
 from server import app
 
 app.run()
+
