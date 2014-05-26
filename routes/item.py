@@ -6,8 +6,9 @@ from flask_cors import cross_origin
 from server import app
 from lib.fs import FileData, FS
 from services import Service
-from services.item import ItemForm, ItemService
- 
+from services.item import ItemForm, ItemService, ItemPictureService
+
+import os 
 import json
 
 
@@ -36,10 +37,34 @@ def get_object_id():
 
 @app.route('/pictures', methods=['POST'])
 @cross_origin(headers=['Content-Type'])
-def save_picture():
-    username = current_user.username
+def save_pictures():
+    _service = ItemPictureService()
     d = json.loads(request.data)
-    fdata = FileData(d['fdata'])
-    fs = FS()
-    fs.save('f0.'+fdata.file_ext, username, fdata.data)
-    return jsonify({'success':'true'})
+    username = d['username']
+    pictures = d['pictures']
+    _pics = {}
+    
+    for name in pictures:
+        if pictures[name] != '':
+            fdata = FileData(pictures[name])            
+            fs = FS()
+            path = os.path.join('images', username, d['id'])
+            fname = name + '.'+fdata.file_ext
+            fs.save(fname, path, fdata.data)
+            order = int(name.lstrip('f'))
+            fpath = os.path.join(path, fname)
+            _id = _service.save_item_picture({'fpath':fpath, 'item_id':d['id'], 'order':order}, 'new')
+            _pics[name]=_id
+        else:
+            _pics[name]=''
+            
+    return jsonify(pictures=json.dumps(_pics))
+
+
+@app.route('/itemPictures', methods=["GET"])
+@cross_origin(headers=['Content-Type'])
+def get_item_pictures():
+    _service = ItemPictureService()
+    items = _service.get_item_pictures()    
+    return jsonify(items=json.dumps(items))
+

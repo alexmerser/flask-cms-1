@@ -2,6 +2,7 @@ import json
 
 from flask import jsonify
 from flask_cors import cross_origin
+from flask_login import current_user
 
 from server import app
 from services.user import LoginForm, UserForm, UserService
@@ -20,8 +21,7 @@ def login():
     if form.errors == []:
         service = UserService()
         ret = service.login(form.account, form.password, form.remember_me)
-        # flash('Logged in successfully!')
-        return jsonify({'error':str(ret)})
+        return jsonify({'error':str(ret),'username':current_user.username})
     else:  # If input has error
         return jsonify({'error':str(form.errors[0])})
 

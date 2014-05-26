@@ -1,9 +1,8 @@
-from models.item import ItemDao
+from models.item import ItemDao, ItemPictureDao
 from lib.validator import Validator
 from lib.form import Form, Mode
 from services import Service
-from services.address import CityService, AddressService
-from models.item import PropertyType
+from services.address import AddressService
 
 from bson.objectid import ObjectId
 
@@ -147,3 +146,33 @@ class ItemForm(Form):
             item['price'] = int(item['price'])
         
         return item
+    
+    
+class ItemPictureService(Service):
+    def __init__(self):
+        self.dao = ItemPictureDao()
+        #self.builtin_path = self.get_default_path() 
+        
+        
+    def get_item_pictures(self, query={}):
+        """ Get item_picture path and item id
+        """
+        item_pictures = []
+        _item_pictures = self.dao.find(query)
+        for _item_picture in _item_pictures:
+            item = self.item_dao.find_one({'_id':_item_picture['item_id']})
+            item_pictures.append({"fname":_item_picture.fpath, "item-name":item.name})
+        return item_pictures
+
+    def save_item_picture(self, inputs, mode):
+        _dict = dict(inputs) # Clone is a must
+        #if '_id' in _dict:
+        #    del _dict['_id']
+            
+        if mode == Mode.EDIT:
+            if 'id' in inputs.keys():
+                _dict['_id'] = inputs['id']
+        else:
+            _dict['created'] = time.time()
+        return self.dao.save(_dict)
+        

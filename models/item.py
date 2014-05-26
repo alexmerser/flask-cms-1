@@ -31,5 +31,19 @@ class ItemDao(Dao):
         self.collection = 'items'
     
 
+class ItemPicture(Model):
+    def __init__(self, _dict):
+        Model.__init__(self, _dict)
+        self.fpath = _dict['fpath']
+        self.item_id = _dict['item_id']
+
+
+class ItemPictureDao(Dao):
+    def __init__(self):
+        Dao.__init__(self, ItemPicture)
+        
+        self.collection = 'item_pictures'
+        
+
 if __name__ == '__main__':
     pass
