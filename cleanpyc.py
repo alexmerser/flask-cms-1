@@ -1,7 +1,7 @@
 # Remove .pyc files from svn from the current directory tree.
  
 import os
-import subprocess
+#import subprocess
  
 # Delete the files first.
  

@@ -160,8 +160,8 @@ class ItemPictureService(Service):
         item_pictures = []
         _item_pictures = self.dao.find(query)
         for _item_picture in _item_pictures:
-            item = self.item_dao.find_one({'_id':_item_picture['item_id']})
-            item_pictures.append({"fname":_item_picture.fpath, "item-name":item.name})
+            #item = self.item_dao.find_one({'_id':_item_picture['item_id']})
+            item_pictures.append({"fpath":_item_picture['fpath']})#, "item-name":item.name})
         return item_pictures
 
     def save_item_picture(self, inputs, mode):

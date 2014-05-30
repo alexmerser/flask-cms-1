@@ -43,7 +43,7 @@ class Form():
         if 'application/json;' in req.content_type.lower():
             return dict(req.json)
         else:
-            return dict(req.values)
+            return dict(req.values.items())
     
     def has_error(self):
         return self.errors != []

@@ -8,9 +8,11 @@ from lib.fs import FileData, FS
 from services import Service
 from services.item import ItemForm, ItemService, ItemPictureService
 
+from bson.objectid import ObjectId
 import os 
 import json
 
+SERVER_PATH = r'..\angular-cms\app'
 
 @app.route('/items', methods=['POST'])
 @cross_origin(headers=['Content-Type'])
@@ -25,8 +27,17 @@ def save_item():
 @cross_origin(headers=['Content-Type'])
 def get_items():
     item_service = ItemService()
-    items = item_service.get_items()    
-    return jsonify(items=json.dumps(items))
+    pic_service = ItemPictureService()
+    items = item_service.get_items()
+    _items = []
+    for item in items:
+        pics = pic_service.get_item_pictures({'item_id':ObjectId(item['id']), 'order':1})
+        if pics != []:
+            item['picture_path'] = pics[0]['fpath']
+        else:
+            item['picture_path'] = ''
+        _items.append(item)
+    return jsonify(items=json.dumps(_items))
 
 @app.route('/object_id', methods=["GET"])
 @cross_origin(headers=['Content-Type'])
@@ -48,12 +59,15 @@ def save_pictures():
         if pictures[name] != '':
             fdata = FileData(pictures[name])            
             fs = FS()
-            path = os.path.join('images', username, d['id'])
+            path = os.path.join(r'images', username, d['id'])
             fname = name + '.'+fdata.file_ext
-            fs.save(fname, path, fdata.data)
+            # Save picture
+            fs.save(fname, os.path.join(SERVER_PATH, path), fdata.data)
+            
+            # Save information to database
             order = int(name.lstrip('f'))
             fpath = os.path.join(path, fname)
-            _id = _service.save_item_picture({'fpath':fpath, 'item_id':d['id'], 'order':order}, 'new')
+            _id = _service.save_item_picture({'fpath':fpath, 'item_id':ObjectId(d['id']), 'order':order}, 'new')
             _pics[name]=_id
         else:
             _pics[name]=''
