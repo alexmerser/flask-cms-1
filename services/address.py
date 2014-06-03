@@ -33,7 +33,9 @@ class AddressService(Service):
         for _address in _addresses:
             c = self.city_dao.find_one({'_id':_address['city_id']})
             addresses.append({"street":_address['street'],
-                              "city":"{0} {1} {2}".format(c['city'], c['province'], c['country']),
+                              "city":c['city'],
+                              "province":c['province'],
+                              "country":c['country'],
                               "postcode":_address['postcode']})
         return addresses
 

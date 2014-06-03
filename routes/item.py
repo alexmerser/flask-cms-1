@@ -14,6 +14,31 @@ import json
 
 SERVER_PATH = r'..\angular-cms\app'
 
+@app.route('/items/<query>', methods=["GET"])
+@cross_origin(headers=['Content-Type'])
+def find_items(query):
+    query_string = request.query_string
+    q = {}
+    if ';' in query_string:
+        
+        args = query_string.split(';')
+        for arg in args:
+            k,v = arg.split('=')
+            if k == '_id':
+                q[k] = ObjectId(v);
+            else:
+                q[k] = v
+    else:
+        k,v = query_string.split('=')
+        if k == '_id':
+            q[k] = ObjectId(v);
+        else:
+            q[k] = v
+        
+    item_service = ItemService()
+    items = item_service.get_items(q)    
+    return jsonify(items=json.dumps(items))
+
 @app.route('/items', methods=['POST'])
 @cross_origin(headers=['Content-Type'])
 def save_item():

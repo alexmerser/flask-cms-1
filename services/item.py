@@ -52,13 +52,19 @@ class ItemService(Service):
         
         if items is not None:
             _items = []
+            address_service = AddressService()
+            
             for item in items:
-                _items.append({'id':str(item['_id']),
+                adds = address_service.get_addresses({'_id':item['address_id']})
+                
+                _dict = dict({'id':str(item['_id']),
                     'title':item['title'], 
                     'description':item['description'], 
                     'price':item['price'],
                     'created':item['created'],
-                    'property_type':item['property_type']})
+                    'property_type':item['property_type']} + adds[0].items())
+                
+                _items.append()
             return _items
         else:
             return []
